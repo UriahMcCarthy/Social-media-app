@@ -4,17 +4,28 @@ const thoughtSchema = require('./Thought');
 // Schema to create User model
 const userSchema = new Schema(
   {
-    first: {
+    username: {
       type: String,
       required: true,
       max_length: 50,
+      trim:true,
+      unique:true,
     },
-    last: {
+    email: {
       type: String,
       required: true,
       max_length: 50,
+      unique:true,
+      match:[/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/]
     },
-    thoughts: [thoughtSchema],
+    thoughts: [{
+      type:Schema.Types.ObjectId,
+      ref:'Thought'
+    }],
+    friends: [{
+      type:Schema.Types.ObjectId,
+      ref:'User'
+    }],
   },
   {
     toJSON: {

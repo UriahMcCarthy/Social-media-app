@@ -1,19 +1,18 @@
 const express = require('express');
 const db = require('./config/connection');
-const routes = require('./routes');
+const routes = require('./routes')
+// Require model
 
-
-
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 const app = express();
-console.log('working')
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(routes);
-console.log('before db.on')
+
+app.use(routes)
+
 db.once('open', () => {
   app.listen(PORT, () => {
-    console.log(`API server for running on port ${PORT}!`);
+    console.log(`API server running on port ${PORT}!`);
   });
 });

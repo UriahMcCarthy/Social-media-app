@@ -5,8 +5,10 @@ module.exports = {
   async getThoughts(req, res) {
     try {
       const thoughts = await Thought.find();
+      return res.json({message:"Getting here", thoughts})
       res.json(thoughts);
     } catch (err) {
+      console.log(err)
       res.status(500).json(err);
     }
   },
@@ -28,8 +30,17 @@ module.exports = {
   // Create a thought
   async createThought(req, res) {
     try {
+      // username, userId, thoughtText
       const thought = await Thought.create(req.body);
-      res.json(thought);
+      return res.json(thought)
+
+      if(thought){
+        const user = await User.findOne({_id:req.body.userId})
+        user.thoughts.push(thought._id)
+        await user.save()
+
+        res.json(thought);
+      }
     } catch (err) {
       console.log(err);
       return res.status(500).json(err);

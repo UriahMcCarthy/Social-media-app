@@ -20,14 +20,11 @@ module.exports = {
       const user = await User.findOne({ _id: req.params.userId })
         .select('-__v');
 
-      if (!user) {
-        return res.status(404).json({ message: 'No user with that ID' })
-      }
-
-      res.json({
-        user,
-        grade: await grade(req.params.userId),
-      });
+        
+        if (!user) {
+          return res.status(404).json({ message: 'No user with that ID' })
+        }
+      return res.json(user)
     } catch (err) {
       console.log(err);
       return res.status(500).json(err);
@@ -36,6 +33,15 @@ module.exports = {
   // create a new user
   async createUser(req, res) {
     try {
+      const {username, email} = req.body
+      // check user with same username
+      const existingUsername = await User.findOne({username})
+      if(existingUsername) return res.status(400).json({message:"User already exists with the same username"})
+
+      // check user with same email
+      const existingEmail = await User.findOne({email})
+      if(existingEmail) return res.status(400).json({message:"User already exists with the same email"})
+
       const user = await User.create(req.body);
       res.json(user);
     } catch (err) {

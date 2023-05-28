@@ -30,6 +30,25 @@ module.exports = {
       return res.status(500).json(err);
     }
   },
+  // Update a user by id
+  async updateUser(req, res) {
+    try {
+      const user = await User.findOne({ _id: req.params.userId })
+        .select('-__v');
+
+        
+        if (user) {
+          user.username = req.body.username
+          user.email = req.body.email
+          const updatedUser = await user.save()
+          res.json(updatedUser)
+        }
+       else  res.status(404).json({ message: 'No user with that ID' })
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json(err);
+    }
+  },
   // create a new user
   async createUser(req, res) {
     try {

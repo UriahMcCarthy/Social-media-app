@@ -27,11 +27,6 @@ const userSchema = new Schema(
       ref:'User'
     }],
   },
-  {
-    toJSON: {
-      getters: true,
-    },
-  }
 );
 
 const User = model('user', userSchema);
